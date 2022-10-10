@@ -4,11 +4,11 @@ var url = "mongodb+srv://access:read2022@maincluster.egjxnl6.mongodb.net/?retryW
 exports.getSoldsData = async (req, res) => {
     try {
         const {
-            timestamp,
-            collection_slug,
+            period,
+            slug,
             limit
         } = req.query;
-        if (collection_slug == undefined || collection_slug == null || collection_slug == "") {
+        if (slug == undefined || slug == null || slug == "") {
             return res.status(400).send({
                 success: false,
                 msg: "collection slug missing"
@@ -22,8 +22,8 @@ exports.getSoldsData = async (req, res) => {
             sort._id = 'descending';
             
         }
-        if(timestamp != undefined){
-            switch (timestamp) {
+        if(period != undefined){
+            switch (period) {
                 case "15M":
                     searchTime = (Math.floor(new Date().getTime()) - (900 * 1000))
                     break;
@@ -47,14 +47,14 @@ exports.getSoldsData = async (req, res) => {
         let filter = {}
         if (searchTime == 0) {
             filter = {
-                collection_slug: collection_slug
+                collection_slug: slug
             }
         } else {
             filter = {
                 timestamp: {
                     $gt: searchTime
                 },
-                collection_slug: collection_slug
+                collection_slug: slug
             }
         }
         MongoClient.connect(url, async function (err, db) {

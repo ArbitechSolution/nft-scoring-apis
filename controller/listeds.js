@@ -1,4 +1,3 @@
-// const db = require("../../db/db")
 
 const MongoClient = require('mongodb').MongoClient;
 const url = "mongodb+srv://access:read2022@maincluster.egjxnl6.mongodb.net/?retryWrites=true&w=majority&ssl=true";
@@ -6,18 +5,18 @@ exports.getListedData = async (req, res) => {
     try {
         const {
             limit,
-            collection_slug
+            slug,
         } = req.query;
         if (limit == null || limit == undefined || limit == "" ||
-            collection_slug == undefined || collection_slug == null || collection_slug == ""
+            slug == undefined || slug == null || slug == ""
         ) {
-            return res.send(400).send({
+            return res.status(400).send({
                 success: false,
                 msg: "parmeter missing"
             })
         }
         let filter = {
-                collection_slug: collection_slug,
+                collection_slug: slug,
             }
         
              MongoClient.connect(url, async function (err, db) {
