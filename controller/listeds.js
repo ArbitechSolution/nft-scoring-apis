@@ -8,8 +8,7 @@ exports.getListedData = async (req, res) => {
             slug,
             period
         } = req.query;
-        if (limit == null || limit == undefined || limit == "" ||
-            slug == undefined || slug == null || slug == ""
+        if (slug == undefined || slug == null || slug == ""
         ) {
             return res.status(400).send({
                 success: false,
@@ -17,6 +16,13 @@ exports.getListedData = async (req, res) => {
             })
         }
         let searchTime = 0;
+        let searchLimit = 0;
+        let sort = {}
+        if(limit != undefined){
+            searchLimit = parseInt(limit)
+            sort._id = 'descending';
+            
+        }
         if(period != undefined){
             switch (period) {
                 case "15M":
@@ -56,7 +62,7 @@ exports.getListedData = async (req, res) => {
              MongoClient.connect(url, async function (err, db) {
             if (err) throw err;
             let dbo = db.db("opensea");
-                dbo.collection("listeds").find(filter).skip(parseInt(limit)).limit(parseInt(limit)).toArray((err, result)=>{
+                dbo.collection("listeds").find(filter).skip(searchLimit).limit(searchLimit).toArray((err, result)=>{
             if (err) throw err;
                 res.status(200).json({
                     result
