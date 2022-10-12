@@ -6,6 +6,7 @@ exports.getListedData = async (req, res) => {
         const {
             limit,
             slug,
+            period
         } = req.query;
         if (limit == null || limit == undefined || limit == "" ||
             slug == undefined || slug == null || slug == ""
@@ -15,10 +16,43 @@ exports.getListedData = async (req, res) => {
                 msg: "parmeter missing"
             })
         }
-        let filter = {
+        let searchTime = 0;
+        if(period != undefined){
+            switch (period) {
+                case "15M":
+                    searchTime = (Math.floor(new Date().getTime()) - (900 * 1000))
+                    break;
+                case "1H":
+                    searchTime = (Math.floor(new Date().getTime()) - (3600 * 1000))
+                    break;
+                case "1D":
+                    searchTime = (Math.floor(new Date().getTime()) - (86400 * 1000))
+                    break;
+                case "7D":
+                    searchTime = (Math.floor(new Date().getTime()) - (604800 * 1000))
+                    break;
+                case "30D":
+                    searchTime = (Math.floor(new Date().getTime()) - (2629743 * 1000))
+                    break;
+                default:
+                    searchTime = 0;
+                    break;
+            }
+        }
+
+        let filter 
+        if(searchTime == 0){
+        filter = {
                 collection_slug: slug,
             }
-        
+        }else{
+            filter = {
+                timestamp: {
+                    $gt: searchTime
+                },
+                collection_slug: slug
+            }
+        }
              MongoClient.connect(url, async function (err, db) {
             if (err) throw err;
             let dbo = db.db("opensea");
