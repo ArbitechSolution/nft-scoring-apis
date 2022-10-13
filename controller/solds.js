@@ -19,7 +19,7 @@ exports.getSoldsData = async (req, res) => {
         let sort = {}
         if(limit != undefined){
             searchLimit = parseInt(limit)
-            sort._id = 'descending';
+            sort={$natural:-1}
             
         }
         if(period != undefined){

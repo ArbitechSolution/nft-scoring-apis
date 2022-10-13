@@ -20,7 +20,7 @@ exports.getListedData = async (req, res) => {
         let sort = {}
         if(limit != undefined){
             searchLimit = parseInt(limit)
-            sort._id = 'descending';
+            sort={$natural:-1}
             
         }
         if(period != undefined){
@@ -62,7 +62,7 @@ exports.getListedData = async (req, res) => {
              MongoClient.connect(url, async function (err, db) {
             if (err) throw err;
             let dbo = db.db("opensea");
-                dbo.collection("listeds").find(filter).skip(searchLimit).limit(searchLimit).toArray((err, result)=>{
+                dbo.collection("listeds").find(filter).limit(searchLimit).sort(sort).toArray((err, result)=>{
             if (err) throw err;
                 res.status(200).json({
                     result
