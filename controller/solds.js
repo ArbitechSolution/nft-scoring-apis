@@ -1,6 +1,5 @@
-// const db = require("../../db/db")
-var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb+srv://access:read2022@maincluster.egjxnl6.mongodb.net/?retryWrites=true&w=majority&ssl=true";
+var mongoose = require('mongoose');
+var db = mongoose.connection;
 exports.getSoldsData = async (req, res) => {
     try {
         const {
@@ -57,14 +56,11 @@ exports.getSoldsData = async (req, res) => {
                 collection_slug: slug
             }
         }
-        MongoClient.connect(url, async function (err, db) {
-            if (err) throw err;
-            const dbo = db.db("opensea");
-            let result = await dbo.collection("solds").find(filter).sort(sort).limit(searchLimit).toArray();
+            let result = await db.collection("solds").find(filter).sort(sort).limit(searchLimit).toArray();
+            console.log("result",result);
             res.status(200).send({
                 result
             })
-        });
     } catch (e) {
         res.status(200).send({
             msg: e.message
