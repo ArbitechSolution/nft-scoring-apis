@@ -26,8 +26,8 @@ async function getFloorPrice(req, res) {
 }
 async function getListedCount(req, res) {
   try {
-    if(!req.query.collectionName) return res.send({message: 'Can not find params'})
-    let collectionslug = await collectionslugController.getListedCount(req.query.collectionName)
+    if(!(req.query.collectionName && req.query.timestamp)) return res.send({message: 'Can not find params'})
+    let collectionslug = await collectionslugController.getListedCount(req.query.collectionName, req.query.timestamp)
     return res.send({response: "Ok", result: collectionslug});
   } catch (err) {
     return res.status(500).send({response: "Error", result: err})

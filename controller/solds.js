@@ -57,7 +57,6 @@ exports.getSoldsData = async (req, res) => {
             }
         }
             let result = await db.collection("solds").find(filter).sort(sort).limit(searchLimit).toArray();
-            console.log("result",result);
             res.status(200).send({
                 result
             })

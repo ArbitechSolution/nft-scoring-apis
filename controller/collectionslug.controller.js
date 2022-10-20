@@ -12,8 +12,8 @@ const getFloorPrice = async (collectionName, timestamp) =>{
   return collection.data;
 }
 
-const getListedCount = async (collectionName) => {
-  const collection = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${collectionName}&type=listed_count`);
+const getListedCount = async (collectionName, timestamp) => {
+  const collection = await axios.get(`https://api.nftinit.io/api/chart/?password=Gunah4423_&slug=${collectionName}&type=listed_count&start=${timestamp}`);
   return collection.data;
 }
 
